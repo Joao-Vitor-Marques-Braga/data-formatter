@@ -1,6 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
+import CsvPage from './CsvPage';
 
 function App() {
+  const [activeTab, setActiveTab] = useState<'text' | 'csv'>('csv');
   const [inputText, setInputText] = useState('');
   const [formatMode, setFormatMode] = useState<'join' | 'end'>('join');
   const [activeSepPill, setActiveSepPill] = useState<string>(':');
@@ -122,11 +124,42 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1 className="app-title">Formatador de Colunas do Excel</h1>
-        <p className="app-subtitle">Cole sua coluna do Excel e formate os dados instantaneamente em tempo real</p>
+        <h1 className="app-title">Formatador de Dados</h1>
+        <p className="app-subtitle">Formate colunas do Excel ou importe arquivos CSV com filtros e separador personalizado</p>
+        
+        {/* Navigation Tabs */}
+        <nav className="nav-tabs">
+          <button 
+            type="button" 
+            className={`nav-tab-btn ${activeTab === 'csv' ? 'active' : ''}`}
+            onClick={() => setActiveTab('csv')}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="8" y1="13" x2="16" y2="13"/>
+              <line x1="8" y1="17" x2="16" y2="17"/>
+            </svg>
+            Upload de CSV
+          </button>
+          <button 
+            type="button" 
+            className={`nav-tab-btn ${activeTab === 'text' ? 'active' : ''}`}
+            onClick={() => setActiveTab('text')}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <line x1="9" y1="3" x2="9" y2="21"/>
+            </svg>
+            Colar Texto / Excel
+          </button>
+        </nav>
       </header>
 
-      <main className="app-grid">
+      {activeTab === 'csv' ? (
+        <CsvPage />
+      ) : (
+        <main className="app-grid">
         {/* Left column: Configurations */}
         <aside className="card">
           <h2 className="card-title">
@@ -345,29 +378,32 @@ function App() {
           </div>
         </section>
       </main>
+      )}
 
-      {/* Stats Counter Footer */}
-      <footer className="stats-container">
-        <div className="stat-item">
-          <div className="stat-value">{inputStats.lines}</div>
-          <div className="stat-label">Linhas Iniciais</div>
-        </div>
-        <div className="stat-item">
-          <div className="stat-value">{formattedData.linesCount}</div>
-          <div className="stat-label">Itens Finais</div>
-        </div>
-        <div className="stat-item">
-          <div className="stat-value">{formattedData.duplicatesRemoved}</div>
-          <div className="stat-label">Duplicados Removidos</div>
-        </div>
-        <div className="stat-item">
-          <div className="stat-value">{formattedData.text.length}</div>
-          <div className="stat-label">Total Caracteres</div>
-        </div>
-      </footer>
+      {/* Stats Counter Footer - Text Mode */}
+      {activeTab === 'text' && (
+        <footer className="stats-container">
+          <div className="stat-item">
+            <div className="stat-value">{inputStats.lines}</div>
+            <div className="stat-label">Linhas Iniciais</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-value">{formattedData.linesCount}</div>
+            <div className="stat-label">Itens Finais</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-value">{formattedData.duplicatesRemoved}</div>
+            <div className="stat-label">Duplicados Removidos</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-value">{formattedData.text.length}</div>
+            <div className="stat-label">Total Caracteres</div>
+          </div>
+        </footer>
+      )}
 
       <div className="app-footer">
-        <p>Desenvolvido com carinho para otimização de fluxo de trabalho do Excel.</p>
+        <p>Desenvolvido com carinho para otimização de fluxo de trabalho de dados e Excel.</p>
       </div>
     </div>
   );
