@@ -1,8 +1,9 @@
 import { useState, useMemo, useEffect } from 'react';
 import CsvPage from './CsvPage';
+import ComparePage from './ComparePage';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'text' | 'csv'>('csv');
+  const [activeTab, setActiveTab] = useState<'text' | 'csv' | 'compare'>('compare');
   const [inputText, setInputText] = useState('');
   const [formatMode, setFormatMode] = useState<'join' | 'end'>('join');
   const [activeSepPill, setActiveSepPill] = useState<string>(':');
@@ -125,10 +126,23 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <h1 className="app-title">Formatador de Dados</h1>
-        <p className="app-subtitle">Formate colunas do Excel ou importe arquivos CSV com filtros e separador personalizado</p>
+        <p className="app-subtitle">Formate colunas do Excel, cruze listas de eventos excluindo rescindidos e processe CSVs com precisão</p>
         
         {/* Navigation Tabs */}
         <nav className="nav-tabs">
+          <button 
+            type="button" 
+            className={`nav-tab-btn ${activeTab === 'compare' ? 'active' : ''}`}
+            onClick={() => setActiveTab('compare')}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <line x1="18" y1="8" x2="23" y2="13"></line>
+              <line x1="23" y1="8" x2="18" y2="13"></line>
+            </svg>
+            Filtrar Rescindidos
+          </button>
           <button 
             type="button" 
             className={`nav-tab-btn ${activeTab === 'csv' ? 'active' : ''}`}
@@ -156,9 +170,9 @@ function App() {
         </nav>
       </header>
 
-      {activeTab === 'csv' ? (
-        <CsvPage />
-      ) : (
+      {activeTab === 'compare' && <ComparePage />}
+      {activeTab === 'csv' && <CsvPage />}
+      {activeTab === 'text' && (
         <main className="app-grid">
         {/* Left column: Configurations */}
         <aside className="card">
