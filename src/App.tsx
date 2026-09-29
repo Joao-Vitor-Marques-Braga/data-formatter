@@ -141,7 +141,7 @@ function App() {
               <line x1="18" y1="8" x2="23" y2="13"></line>
               <line x1="23" y1="8" x2="18" y2="13"></line>
             </svg>
-            Filtrar Rescindidos
+            Filtrar Rescindidos & Duplicados (2 CSVs)
           </button>
           <button 
             type="button" 
